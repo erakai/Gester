@@ -1,3 +1,3 @@
-[submodule "gesture-library"]
-	path = gesture-library
-	url = https://github.com/erakai/gesture-library
+[submodule "src/gesturelibrary"]
+	path = src/gesturelibrary
+	url = https://github.com/erakai/gesturelibrary
