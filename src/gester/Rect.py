@@ -35,8 +35,4 @@ class Rect(Entity):
         )
 
     def think(self):
-        x = self.position.get_x()
-        y = self.position.get_y()
-
-        self.position.set(x + 10, y)
         pass

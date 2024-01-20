@@ -1,4 +1,6 @@
 import pygame
+import pygame.camera
+from pygame.locals import *
 
 from gester import Entity
 
@@ -15,12 +17,22 @@ class Game:
     def add_ent(self, ent: Entity):
         self._ents.append(ent)
 
-    def init(self):
+    def init(self, window_width, window_height, isCamera=False):
         # pygame setup
         pygame.init()
-        surface = pygame.display.set_mode((1280, 720))
+        surface = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
         running = True
+
+        cam : pygame.camera.Camera
+        if (isCamera):
+            pygame.camera.init()
+
+            cam = pygame.camera.Camera(0, (window_width, window_height))
+            if (cam == None):
+                raise RuntimeError("No avaliable cameras, sorry :(")
+
+            cam.start()
 
         for ent in self._ents:
             ent.start()
@@ -32,8 +44,13 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            # fill the screen with a color to wipe away anything from last frame
-            surface.fill("grey")
+            if (isCamera):
+                img = cam.get_image()
+                img = pygame.transform.flip(img, True, False)
+                surface.blit(img,(0,0))
+            else:
+                # fill the screen with a color to wipe away anything from last frame
+                surface.fill("grey")
 
             # RENDER YOUR GAME HERE
 
@@ -46,4 +63,6 @@ class Game:
 
             clock.tick(60)  # limits FPS to 60
 
+        if (cam is not None):
+            cam.stop()
         pygame.quit()

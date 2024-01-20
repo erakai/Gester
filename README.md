@@ -37,5 +37,14 @@ poetry install
 
 If you are having trouble running `poetry shell` due to python versioning, try `poetry env use $(pyenv which python)`.
 
+Finally, you are able to launch a game as follows:
+```
+python3 -m games.{game}
+```
+
+For example,
+```
+python3 -m games.pong 
+```
 
 ## Screenshots
