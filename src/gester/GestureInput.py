@@ -1,14 +1,62 @@
 import asyncio
+import threading
 from gestures import GestureWrapper, GestureMessage
 
+"""
+public:
+    init(dimensions) <- must be called first 
+    close()
 
-def process_data(data: GestureMessage):
-    print("Gesture:", data.gesture)
-    print("Coords: ", data.x, data.y)
+    get_hand_pos_x()
+    get_hand_pos_y()
+    get_hand_gesture()
+"""
+
+_lock = threading.Lock()
+_hand_pos_x = -1
+_hand_pos_y = -1
+_hand_gesture = "NO_HAND"
+_wrapper = None
 
 
-# (x, y), fps
-wrapper = GestureWrapper((100, 100))
-stream = wrapper.create_stream(process_data)
+def get_hand_pos_x():
+    _lock.acquire()
+    ret = _hand_pos_x
+    _lock.release()
+    return ret
 
-asyncio.run(stream.begin_read())
+
+def get_hand_pos_y():
+    _lock.acquire()
+    ret = _hand_pos_y
+    _lock.release()
+    return ret
+
+
+def get_hand_gesture():
+    _lock.acquire()
+    ret = _hand_gesture
+    _lock.release()
+    return ret
+
+
+def _process_data(data: GestureMessage):
+    _lock.acquire()
+    _hand_pos_x = data.x
+    _hand_pos_y = data.y
+    _hand_gesture = data.gesture
+    _lock.release()
+
+
+def init(dimensions: tuple[int, int]) -> None:
+    """
+    This function must be called exactly once before any input will be read
+    """
+    _wrapper = GestureWrapper(dimensions)
+    stream = _wrapper.create_stream(_process_data)
+    asyncio.run(stream.begin_read())
+
+
+def close() -> None:
+    if _wrapper is not None:
+        _wrapper.close()
