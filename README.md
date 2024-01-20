@@ -22,7 +22,7 @@ brew install pipx
 
 Make sure that you follow the [pyenv](https://github.com/pyenv/pyenv) directions to set up your shell.
 
-Now navigate to this direction (`gesture-library/`):
+Now navigate to this directory (`gester/`):
 ```bash
 pyenv install 3.12
 pyenv local 3.12
@@ -34,6 +34,8 @@ pipx install poetry
 poetry shell
 poetry install
 ```
+
+If you are having trouble running `poetry shell` due to python versioning, try `poetry env use $(pyenv which python)`.
 
 
 ## Screenshots

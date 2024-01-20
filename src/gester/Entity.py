@@ -7,34 +7,34 @@ from gester.attributes import Attribute, AttributeContainer
 
 
 class Entity(ABC):
-	_id : str
-	_ids  = set() # static
+    _id: str
+    _ids = set()  # static
 
-	_attrs = AttributeContainer()
+    _attrs = AttributeContainer()
 
-	def __init__(self):
-		self._id = self._gen_id()
+    def __init__(self):
+        self._id = self._gen_id()
 
-	def _gen_id(self):
-		_i = ""
-		for i in range(0, 99999):
-			_i = "Entity@" + str(random.randint(0, 99999)).rjust(5, "0")
-			if _i not in self._ids:
-				self._ids.add(_i)
-				break
-		return _i
+    def _gen_id(self):
+        _i = ""
+        for i in range(0, 99999):
+            _i = "Entity@" + str(random.randint(0, 99999)).rjust(5, "0")
+            if _i not in self._ids:
+                self._ids.add(_i)
+                break
+        return _i
 
-	@abstractmethod
-	def start(self):
-		pass
+    @abstractmethod
+    def start(self):
+        pass
 
-	@abstractmethod
-	def think(self):
-		pass
+    @abstractmethod
+    def think(self):
+        pass
 
-	@abstractmethod
-	def render(self, surface : pygame.Surface):
-		pass
+    @abstractmethod
+    def render(self, surface: pygame.Surface):
+        pass
 
-	def on_pygame_event(self, event : pygame.event.Event):
-		pass
+    def on_pygame_event(self, event: pygame.event.Event):
+        pass
