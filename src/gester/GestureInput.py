@@ -1,4 +1,3 @@
-import asyncio
 import threading
 from gestures import GestureWrapper, GestureMessage
 
@@ -56,7 +55,8 @@ def init(dimensions: tuple[int, int]) -> None:
     """
     _wrapper = GestureWrapper(dimensions)
     stream = _wrapper.create_stream(_process_data)
-    asyncio.run(stream.begin_read())
+    thread = threading.Thread(target=stream.begin_read)
+    thread.start()
 
 
 def close() -> None:
