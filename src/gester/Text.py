@@ -10,15 +10,12 @@ class Text(Entity):
     size: Size
     color: Color
     text = "Default Text"
-    started = False
-    start_time = time.time()
 
     @has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
         super().__init__()
 
     def start(self):
-        # initialize timer
         pass
 
     # call this inside of think if you want the text to change
@@ -60,13 +57,4 @@ class Text(Entity):
         surface.blit(text_surface, text_rect)
 
     def think(self):
-        # new_str = self.text + "a"
-        # self.setText(new_str)
-
-        # check if timer done
-        # if so then check hand gesture, if correct say "good job" otherwise say "that was not quite it"
-
-        # reinitilize timer and 
-
-        # if timer isn't done, display how many seconds remaining until it will check
         pass
