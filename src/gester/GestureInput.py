@@ -58,7 +58,7 @@ def get_hand_gesture():
 
 
 def _process_data(data: GestureMessage):
-    global _hand_pos_y, _hand_pos_x, _hand_gesture
+    global _hand_pos_y, _hand_pos_x, _hand_gesture, _pointer_x, _pointer_y
 
     _lock.acquire()
     _hand_pos_x = data.x
