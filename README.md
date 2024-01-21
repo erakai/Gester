@@ -2,6 +2,8 @@
 
 # Gester
 
+## 🥉 Third Place Winner @ [Boilermake XI](https://boilermake-xi.devpost.com)
+
 Gester is a creative collection of games utilizing an in-house gesture processing library that reads in webcam data to generate an approximation of your hand moving on a desk.
 
 Gester was created as an entry in the 36-hour Boilermake XI Hackathon. You can find the entry [here](https://devpost.com/software/gester-a-gesture-based-arcade-platform).
