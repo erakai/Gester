@@ -20,6 +20,11 @@ GAMES = [
         "games/assets/gallery-covers/pong.jpeg",
     ),
     (
+        "Slot Machine Simulation",
+        "games/slot-machine/slots.py",
+        "games/assets/gallery-covers/casino.jpeg",
+    ),
+    (
         "Hand Visualization",
         "games/hand-visualizer/hand_visualization.py",
         "games/assets/gallery-covers/hand-visualizer.jpeg",
