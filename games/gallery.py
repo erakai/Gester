@@ -20,15 +20,21 @@ GAMES = [
         "games/assets/gallery-covers/pong.jpeg",
     ),
     (
-        "Slot Machine Simulation",
+        "Casino",
         "games/slot-machine/slots.py",
-        "games/assets/gallery-covers/casino.jpeg",
+        "games/assets/gallery-covers/casino.png",
+    ),
+    (
+        "2048",
+        "games/2048/2048.py",
+        "games/assets/gallery-covers/2048.jpeg",
     ),
     (
         "Hand Visualization",
         "games/hand-visualizer/hand_visualization.py",
         "games/assets/gallery-covers/hand-visualizer.jpeg",
     ),
+    ("Simon Says", "games/SimonSays/SimonSays.py", "games/assets/SimonSays.png"),
 ]
 COLUMN_COUNT = 5
 COVER_SIZE_X = 250

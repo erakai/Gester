@@ -3,8 +3,9 @@ from gester import GestureInput
 
 from time import perf_counter
 
-SWIPE_DELTA_THRESHOLD = 300
-SWIPE_TIME_THRESHOLD = 0.5
+SWIPE_DELTA_THRESHOLD_X = 130
+SWIPE_DELTA_THRESHOLD_Y = 75
+SWIPE_TIME_THRESHOLD = 0.4
 
 class DiffQueue():
 	SIZE = 10
@@ -19,7 +20,12 @@ class DiffQueue():
 			self._queue.pop(0)
 			self._queue.append(v)
 
+	def flush(self):
+		self._queue = [-1 for i in range(self.SIZE)]
+
 	def get_diff(self):
+		if (self._queue[1] == -1 or self._queue[self.SIZE - 2] == -1):
+			return 0
 		return self._queue[0] - self._queue[self.SIZE - 1]
 
 
@@ -51,11 +57,11 @@ class SwipeDetector(Entity):
 		pass
 
 	def think(self):
-		self._x_queue.append(GestureInput.get_hand_pos_x())
-		self._y_queue.append(GestureInput.get_hand_pos_y())
+		self._x_queue.append(GestureInput.get_pointer_x())
+		self._y_queue.append(GestureInput.get_pointer_y())
 
 		if (GestureInput.get_hand_gesture() == "INDEX_EXTENDED"):
-			if (not self.on_wait and abs(self._x_queue.get_diff()) > SWIPE_DELTA_THRESHOLD):
+			if (not self.on_wait and abs(self._x_queue.get_diff()) > SWIPE_DELTA_THRESHOLD_X):
 				self.on_wait = True
 				self.time_start = perf_counter() 
 
@@ -65,7 +71,7 @@ class SwipeDetector(Entity):
 				if (self._x_queue.get_diff() < 0):
 					self.call_hooked_ents("right")
 
-			if (not self.on_wait and abs(self._y_queue.get_diff()) > SWIPE_DELTA_THRESHOLD):
+			if (not self.on_wait and abs(self._y_queue.get_diff()) > SWIPE_DELTA_THRESHOLD_Y):
 				self.on_wait = True
 				self.time_start = perf_counter() 
 
@@ -74,6 +80,9 @@ class SwipeDetector(Entity):
 
 				if (self._y_queue.get_diff() < 0):
 					self.call_hooked_ents("down")
+		else:
+			self._x_queue.flush()
+			self._y_queue.flush()
 
 		if (perf_counter() - self.time_start > SWIPE_TIME_THRESHOLD):
 			self.on_wait = False

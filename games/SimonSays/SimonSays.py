@@ -1,20 +1,8 @@
-import pygame
-import time
-import random
+from gester import Game, Entity, GestureInput, attributes
+from gester.attributes import Point, Size, Color
+import time, random, pygame
 
-from gester import Entity, Game, GestureInput
-from gester.attributes import Point, Size, Color, has_attrs
-
-
-# make gestures more accurate half-DONZERONI
-# add score counter DONZERONI
-# TODO: decrease time over time, no floor goes all the way to milliseconds 
-# TODO: make it take 10 and choose the highest match
-
-# probably should've made display string a class member huh
-
-# 1:52 AM - get_gesture 
-
+game = Game()
 
 class SimonSays(Entity):
     position: Point
@@ -25,8 +13,7 @@ class SimonSays(Entity):
     game_in_progress = False
     start_time = None
     time_to_move = 2
-    gestures = ["OPEN_HAND", "CLOSED_FIST", "INDEX_EXTENDED", "PEACE_SIGN",
-                        "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
+    gestures = ["OPEN_HAND", "CLOSED_FIST", "INDEX_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED"]
     min_value = 0
     max_value = len(gestures) - 1
     simon_said = False
@@ -37,9 +24,10 @@ class SimonSays(Entity):
     guess_correct = False
     go_next = False
     hash_table = None # Used to match a gesture to its index in occurences
-    occurences = [0] * (max_value + 1)
+    occurences = [0] * (max_value + 2)
+    color = (0, 0, 0)
 
-    @has_attrs(("position", Point), ("size", Size), ("color", Color))
+    @attributes.has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
         super().__init__()
 
@@ -173,17 +161,22 @@ class SimonSays(Entity):
                         get_gesture = GestureInput.get_hand_gesture()
                         closest_gesture = GestureInput.get_hand_gesture()
                         # print("get gesture: " + str(get_gesture))
-                        if not get_gesture == "NO_HAND":
+                        if get_gesture in self.gestures:
                             # print("index being added to: " + str(self.hash_table[get_gesture]))
                             # for key, value in self.hash_table.items():
                             #     print(f"Key: {key}, Value: {value}")
                             self.occurences[self.hash_table[get_gesture]] += 1
+                        else:
+                            self.occurences[len(self.occurences) - 1] += 1
 
                     
                     max_val = max(self.occurences)
                     max_index = self.occurences.index(max_val)
 
-                    closest_gesture = self.gestures[max_index]
+                    if max_index == len(self.occurences) - 1:
+                        closest_gesture = ""
+                    else:
+                        closest_gesture = self.gestures[max_index]
                     # for key, value in self.hash_table.items():
                     #     print(f"Key: {key}, Value: {value}")
 
@@ -221,3 +214,10 @@ class SimonSays(Entity):
                     self.end_turn = True
                 elif self.go_next:
                     self.reset()
+
+Simon = SimonSays(Size("size", 1280, 120), Point("position", 0, 0))
+
+# banner
+game.add_ent(Simon)
+
+game.init(1280, 720, True)
