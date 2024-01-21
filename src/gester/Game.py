@@ -2,7 +2,7 @@ import pygame
 import pygame.camera
 from pygame.locals import *
 
-from gester import Entity
+from gester import Entity, GestureInput
 
 
 class Game:
@@ -23,6 +23,8 @@ class Game:
         surface = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
         running = True
+
+        GestureInput.init((window_width, window_height))
 
         cam : pygame.camera.Camera
         if (isCamera):
@@ -66,3 +68,4 @@ class Game:
         if (cam is not None):
             cam.stop()
         pygame.quit()
+        GestureInput.close()

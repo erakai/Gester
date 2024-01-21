@@ -54,9 +54,13 @@ def init(dimensions: tuple[int, int]) -> None:
     """
     This function must be called exactly once before any input will be read
     """
+    print("one")
     _wrapper = GestureWrapper(dimensions)
+    print("two")
     stream = _wrapper.create_stream(_process_data)
+    print("three")
     asyncio.run(stream.begin_read())
+    print("four")
 
 
 def close() -> None:
