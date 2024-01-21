@@ -135,8 +135,8 @@ class HandFollower(Rect):
 		else:
 			self.color.setAll(0, 0, 0, 0)
 
-		x = GestureInput.get_hand_pos_x()
-		y = GestureInput.get_hand_pos_y()
+		x = GestureInput.get_pointer_x()
+		y = GestureInput.get_pointer_y()
 
 		self.position.set(x, y)
 
