@@ -9,9 +9,12 @@ class SimonSays(Entity):
     position: Point
     size: Size
     color: Color
-    text = "Simon Says"
+    text = "Loading"
     started = False
-    start_time = time.time()
+    start_time = None
+    last_tick = None
+    gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "NO_HAND", "PEACE_SIGN",
+                        "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
 
     @has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
@@ -19,6 +22,7 @@ class SimonSays(Entity):
 
     def start(self):
         # initialize timer
+        self.start_time = round(time.perf_counter())
         pass
 
     # call this inside of think if you want the text to change
@@ -63,10 +67,37 @@ class SimonSays(Entity):
         # new_str = self.text + "a"
         # self.setText(new_str)
 
-        # check if timer done
-        # if so then check hand gesture, if correct say "good job" otherwise say "that was not quite it"
+        # --Set Up--
+        # For the first 5 seconds just say "Simon Says starting in: [remaining seconds]"
+        if self.start_time + 5 < round(time.perf_counter()):
+            self.started = True
 
-        # reinitilize timer and 
+        if not self.started:
+            # display the text with the countdown
+            time_to_start = (self.start_time + 5) - round(time.perf_counter())
+            display_string = "Simon Says starting in: " + str(time_to_start)
+            self.setText(display_string)
+        else: 
+            # --started--
+            # now it has started
+            # pick a random gesture out of the set (create some maybe)
+            # display the name with either "Simon says [name]" or just "[name]"
+            # gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "NO_HAND", "PEACE_SIGN",
+            #             "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
+            
 
-        # if timer isn't done, display how many seconds remaining until it will check
-        pass
+            # display counting down timer
+            # once it hits zero check the current gesture
+            # if it's the same gesture and the text didn't say "Simon Says" then show "Simon didn't say go!"
+            # otherwise show "you did it!"
+            
+            # show name of gesture
+            # display counting down timer
+
+            # once it hits 0 then check the current hand gesture
+            
+            # check if timer done
+            # if so then check hand gesture, if correct say "good job" otherwise say "that was not quite it"
+            # reinitilize timer and 
+            # if timer isn't done, display how many seconds remaining until it will check
+            pass

@@ -49,7 +49,7 @@ class Text(Entity):
         font = pygame.font.SysFont('Comic Sans MS', 30)
         
         # Render the text
-        text_color = (255, 255, 255)  # Change this to your desired text color, different from the rectangle color
+        text_color = (255, 255, 255)
         text_surface = font.render(self.text, True, text_color)
         
         # Positioning the text
