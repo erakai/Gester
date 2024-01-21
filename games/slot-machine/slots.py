@@ -113,8 +113,6 @@ class Casino(Entity):
         self.total_dispatches = 0
         self.win = False
 
-        sounds.start_looping_sound("slot-machine")
-
         for tile in self.existing_tiles:
             tile.kill()
         self.existing_tiles = []
@@ -132,6 +130,7 @@ class Casino(Entity):
             self.add_ent(winner, index=1)
 
     def dispatch_tiles(self):
+        sounds.play_sound("slot-machine")
         self.total_dispatches += 1
         tiles = [generate_tile(), generate_tile(), generate_tile()]
         for i, tile in enumerate(tiles):
@@ -156,7 +155,6 @@ class Casino(Entity):
                 if 1000 * (now - self.animation_start) > config.TIME_OF_SPIN_MS:
                     self.dispatch_winning_tiles()
                     self.animation_playing = False
-                    sounds.stop_looping_sound("slot-machine")
                 else:
                     self.dispatch_tiles()
                     self.last_dispatch = now
