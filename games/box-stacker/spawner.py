@@ -76,16 +76,15 @@ class Box(Rect):
 
             for box in self.platform.attached_boxes:
                 if self.check_collision(box):
-                    # self.fix()
-                    self.attach()
+                    self.fix()
             if self.check_collision(self.platform):
-                self.attach()
+                self.fix()
 
     def fix(self):
         self.fixed = True
         self.update_score()
         self.platform.attach_box(self)
-        # sounds.play_sound("box")
+        sounds.play_sound("box")
 
     def check_collision(self, entity: Rect):
         x = self.position.get_x()
