@@ -66,10 +66,9 @@ class Player(Rect):
 		x = self.position.get_x()
 		y = self.position.get_y() + 75
 
-		#hand_y = GestureInput.get_hand_pos_y()
+		hand_y = GestureInput.get_hand_pos_y()
 
-		#delta = y - hand_y 
-		delta = 0
+		delta = y - hand_y 
 
 		if (delta > 10):
 			self.speed_y = -SPEED
@@ -77,7 +76,7 @@ class Player(Rect):
 			self.speed_y = SPEED
 		else:
 			self.speed_y = 0
-		#self.position.set(x, y - 75 + self.speed_y)
+		self.position.set(x, y - 75 + self.speed_y)
 
 class Enemy(Rect): 
 	speed_y : int = 0
