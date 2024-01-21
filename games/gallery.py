@@ -31,7 +31,7 @@ GAMES = [
     ),
     (
         "Simon Says",
-        "games/SimonSays.py",
+        "games/SimonSays/SimonSays.py",
         "games/assets/SimonSays.png"
     )
 ]

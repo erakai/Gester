@@ -1,20 +1,8 @@
-import pygame
-import time
-import random
+from gester import Game, Entity, GestureInput, attributes
+from gester.attributes import Point, Size, Color
+import time, random, pygame
 
-from gester import Entity, Game, GestureInput
-from gester.attributes import Point, Size, Color, has_attrs
-
-
-# make gestures more accurate half-DONZERONI
-# add score counter DONZERONI
-# TODO: decrease time over time, no floor goes all the way to milliseconds 
-# TODO: make it take 10 and choose the highest match
-
-# probably should've made display string a class member huh
-
-# 1:52 AM - get_gesture 
-
+game = Game()
 
 class SimonSays(Entity):
     position: Point
@@ -37,8 +25,9 @@ class SimonSays(Entity):
     go_next = False
     hash_table = None # Used to match a gesture to its index in occurences
     occurences = [0] * (max_value + 2)
+    color = (0, 0, 0)
 
-    @has_attrs(("position", Point), ("size", Size), ("color", Color))
+    @attributes.has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
         super().__init__()
 
@@ -225,3 +214,10 @@ class SimonSays(Entity):
                     self.end_turn = True
                 elif self.go_next:
                     self.reset()
+
+Simon = SimonSays(Size("size", 1280, 120), Point("position", 0, 0))
+
+# banner
+game.add_ent(Simon)
+
+game.init(1280, 720, True)
