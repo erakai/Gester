@@ -27,6 +27,15 @@ class Ball(Rect):
 		x = self.position.get_x()
 		y = self.position.get_y()
 
+		# left out-of-bound
+		if (x + 25 < 100):
+			self.start()
+			return
+
+		if (x - 25 > WIDTH - 100):
+			self.start()
+			return
+
 		self.position.set(x + self.speed_x, y + self.speed_y)
 
 	def on_collide(self, obj):
@@ -59,7 +68,8 @@ class Player(Rect):
 
 		#hand_y = GestureInput.get_hand_pos_y()
 
-		delta = y - hand_y 
+		#delta = y - hand_y 
+		delta = 0
 
 		if (delta > 10):
 			self.speed_y = -SPEED
@@ -67,7 +77,7 @@ class Player(Rect):
 			self.speed_y = SPEED
 		else:
 			self.speed_y = 0
-		self.position.set(x, y - 75 + self.speed_y)
+		#self.position.set(x, y - 75 + self.speed_y)
 
 class Enemy(Rect): 
 	speed_y : int = 0
