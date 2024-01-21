@@ -68,5 +68,6 @@ class Game:
 
         if (cam is not None):
             cam.stop()
-        pygame.quit()
         GestureInput.close()
+        pygame.quit()
+        
