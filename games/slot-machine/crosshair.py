@@ -4,6 +4,10 @@ import config
 
 
 class Crosshair(Rect):
+    def __init__(self, on_handle_pulled, *args):
+        super().__init__(*args)
+        self.on_handle_pulled = on_handle_pulled
+
     def start(self):
         self.position.set(-100, -100)
 
@@ -20,9 +24,26 @@ class Crosshair(Rect):
         self.hand_x = -100
         self.hand_y = -100
 
+        self.closed_at = (-1, -1)
+
     def update_input(self, x, y, open):
         self.hand_x = x
         self.hand_y = y
+
+        if self.open and not open:
+            self.closed_at = (x, y)
+        elif not self.open and open:
+            if (
+                self.closed_at[0] < 950
+                and self.closed_at[0] > 820
+                and self.closed_at[1] > 55
+                and self.closed_at[1] < 155
+                and x < 1100
+                and x > 700
+                and y > 200
+            ):
+                self.on_handle_pulled()
+
         self.open = open
 
     def think(self):

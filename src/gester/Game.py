@@ -17,6 +17,9 @@ class Game:
     def add_ent(self, ent: Entity):
         self._ents.append(ent)
 
+    def prefix_ent(self, ent: Entity, index=0):
+        self._ents.insert(index, ent)
+
     def init(self, window_width, window_height, isCamera=False):
         # pygame setup
         pygame.init()
@@ -67,7 +70,8 @@ class Game:
                 ent.think()
 
             for e in to_remove:
-                self._ents.remove(e)
+                if e in self._ents:
+                    self._ents.remove(e)
 
             # flip() the display to put your work on screen
             pygame.display.flip()

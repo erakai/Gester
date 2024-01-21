@@ -17,12 +17,13 @@ def force_quit():
     mix.stop()
 
 
-def create_sound(name: str, path: str) -> None:
+def create_sound(name: str, path: str, volume=1.0) -> None:
     global _loaded_sounds
     """
     Loads a sound that can be played
     """
     new_sound = mix.Sound(path)
+    new_sound.set_volume(volume)
     _loaded_sounds[name] = new_sound
 
 
