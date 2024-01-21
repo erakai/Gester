@@ -2,7 +2,7 @@
 
 # Gester
 
-## 🥉 Third Place Winner @ [Boilermake XI](https://boilermake-xi.devpost.com), [Our DevPost](https://devpost.com/software/gester-a-gesture-based-arcade-platform)
+## 🥉 Third Place Winner @ [Boilermake XI](https://boilermake-xi.devpost.com) | [DevPost](https://devpost.com/software/gester-a-gesture-based-arcade-platform)
 
 Gester is a creative collection of games utilizing an in-house gesture processing library that reads in webcam data to generate an approximation of your hand moving on a desk.
 
