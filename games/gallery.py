@@ -13,13 +13,18 @@ GAMES = [
         "Hand Visualization",
         "games/hand-visualizer/hand_visualization.py",
         "games/assets/gallery-covers/hand-visualizer.jpeg",
-    )
+    ),
+    (
+        "Pong",
+        "games/pong/pong.py",
+        "games/assets/gallery-covers/pong.jpeg",
+    ),
 ]
 COLUMN_COUNT = 5
 COVER_SIZE_X = 250
 COVER_SIZE_Y = 150
 X_SPACING = 25
-Y_SPACING = 20
+Y_SPACING = 55
 
 
 def launch_game(index: int):
@@ -34,7 +39,7 @@ def launch_game(index: int):
 pygame.init()
 
 title_font = pygame.font.SysFont("Comic Sans MS", 40)
-label_font = pygame.font.SysFont("Comic Sans MS", 15)
+label_font = pygame.font.SysFont("Comic Sans MS", 20)
 
 screen = pygame.display.set_mode(
     [
@@ -58,7 +63,7 @@ for game in GAMES:
 game_rects = []
 for i, game in enumerate(GAMES):
     x = 20 + (i % COLUMN_COUNT) * (COVER_SIZE_X + X_SPACING)
-    y = 80 + 20 + (i / COLUMN_COUNT) * (COVER_SIZE_Y + Y_SPACING)
+    y = 80 + 20 + ((i // COLUMN_COUNT) * (COVER_SIZE_Y + Y_SPACING))
     detect_rect = pygame.Rect(x, y, COVER_SIZE_X, COVER_SIZE_Y)
     game_rects.append((x, y, detect_rect))
 
@@ -84,7 +89,9 @@ while running:
         name = game[0]
         image = cover_images[i]
 
-        screen.blit(image, (game_rects[i][0], game_rects[i][1]))
+        x = game_rects[i][0]
+        y = game_rects[i][1]
+        screen.blit(image, (x, y))
         border_color = (3, 14, 38)
         if game_rects[i][2].collidepoint(mouse_pos):
             border_color = (255, 255, 255)

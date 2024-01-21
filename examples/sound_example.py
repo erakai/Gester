@@ -4,7 +4,7 @@ from gester import sounds, Game, Entity
 class SoundTest(Entity):
     def __init__(self, *args):
         super().__init__()
-        sounds.create_sound("slots", "games/assets/slot-machine.wav")
+        sounds.create_sound("slots", "games/assets/sounds/slot-machine.wav")
         self.playing = False
 
     def think(self):
