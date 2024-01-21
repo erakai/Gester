@@ -17,13 +17,13 @@ class BoxSpawner(Entity):
         self.platform = platform
 
     def start(self):
-        box_image = pygame.image.load("games/assets/box.png")
-        self.box_image = box_image
+        berry_image = pygame.image.load("games/assets/berry.png")
+        self.berry_image = berry_image
         self.last_spawned = perf_counter()
 
     def think(self):
-        if self.get_score() < 0:
-            return
+        # if self.get_score() < 0:
+        #     return
 
         cur = perf_counter()
         if (1000 * (cur - self.last_spawned)) > config.TIME_BETWEEN_BOXES_MS:
@@ -36,56 +36,57 @@ class BoxSpawner(Entity):
         pass
 
     def spawn(self):
-        spawn_x = random.randint(20, config.WIDTH - 20)
-        spawn_w = random.randint(25, 75)
-        spawn_h = random.randint(25, 75)
+        spawn_x = random.randint(35, config.WIDTH - 35)
+        spawn_y = random.randint(35, config.HEIGHT - 35)
         self.add_ent(
             Box(
-                self.box_image,
+                self.berry_image,
                 self.update_score,
                 self.platform,
-                Point("position", spawn_x, -100),
-                Size("size", spawn_w, spawn_h),
+                Point("position", spawn_x, spawn_y),
+                Size("size", 35, 35),
             )
         )
 
 
 class Box(Rect):
-    def __init__(self, box_image, update_score, platform, *args):
+    def __init__(self, berry_image, update_score, platform, *args):
         super().__init__(*args)
-        self.box_image = pygame.transform.scale(
-            box_image, (self.size.get_width(), self.size.get_height())
+        self.berry_image = pygame.transform.scale(
+            berry_image, (self.size.get_width(), self.size.get_height())
         )
         self.update_score = update_score
         self.fixed = False
         self.platform = platform
-        sounds.create_sound("box", "games/assets/sounds/wood-hit.wav")
+        sounds.create_sound("box", "games/assets/sounds/pika.wav")
 
     def start(self):
         pass
 
     def think(self):
-        if self.position.get_y() > config.HEIGHT:
-            self.update_score(decrement=True)
-            self.kill()
+        # if self.position.get_y() > config.HEIGHT:
+        #     self.update_score(decrement=True)
+        #     self.kill()
 
         if not self.fixed:
+            # self.position.set(
+            #     self.position.get_x(), self.position.get_y() + config.BOX_SPEED
+            # )
+            
             self.position.set(
-                self.position.get_x(), self.position.get_y() + config.BOX_SPEED
+                self.position.get_x(), self.position.get_y()
             )
 
-            for box in self.platform.attached_boxes:
-                if self.check_collision(box):
-                    # self.fix()
-                    self.attach()
+            # for box in self.platform.attached_boxes:
+            #     if self.check_collision(box):
+            #         self.fix()
             if self.check_collision(self.platform):
-                self.attach()
+                self.eaten()
 
-    def fix(self):
-        self.fixed = True
-        self.update_score()
-        self.platform.attach_box(self)
-        # sounds.play_sound("box")
+    # fix()
+    def eaten(self):
+        sounds.play_sound("box")
+        self.kill()
 
     def check_collision(self, entity: Rect):
         x = self.position.get_x()
@@ -106,4 +107,4 @@ class Box(Rect):
         return False
 
     def render(self, screen: pygame.Surface):
-        screen.blit(self.box_image, (self.position.get_x(), self.position.get_y()))
+        screen.blit(self.berry_image, (self.position.get_x(), self.position.get_y()))

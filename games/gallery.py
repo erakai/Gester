@@ -34,7 +34,16 @@ GAMES = [
         "games/hand-visualizer/hand_visualization.py",
         "games/assets/gallery-covers/hand-visualizer.jpeg",
     ),
-    ("Simon Says", "games/SimonSays/SimonSays.py", "games/assets/SimonSays.png"),
+    (
+        "Simon Says", 
+        "games/SimonSays/SimonSays.py", 
+        "games/assets/gallery-covers/SimonSays.png"
+    ),
+    (
+        "Pikachu Tomodachi",
+        "games/Tomodachi/Tomodachi.py",
+        "games/assets/gallery-covers/Pikachu_cover.png"
+    )
 ]
 COLUMN_COUNT = 5
 COVER_SIZE_X = 250
