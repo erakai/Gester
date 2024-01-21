@@ -10,14 +10,19 @@ The main "launcher" for all other games in Gester.
 # Each tuple should be: (Name, Path to .py runner, Path to gallery image)
 GAMES = [
     (
-        "Hand Visualization",
-        "games/hand-visualizer/hand_visualization.py",
-        "games/assets/gallery-covers/hand-visualizer.jpeg",
+        "Box Stacker",
+        "games/box-stacker/box_stacker.py",
+        "games/assets/gallery-covers/box-stacker.jpeg",
     ),
     (
         "Pong",
         "games/pong/pong.py",
         "games/assets/gallery-covers/pong.jpeg",
+    ),
+    (
+        "Hand Visualization",
+        "games/hand-visualizer/hand_visualization.py",
+        "games/assets/gallery-covers/hand-visualizer.jpeg",
     ),
 ]
 COLUMN_COUNT = 5

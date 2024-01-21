@@ -14,6 +14,7 @@ class Entity(ABC):
 
     def __init__(self):
         self._id = self._gen_id()
+        self.marked_for_death = False
 
     def _gen_id(self):
         _i = ""
@@ -23,6 +24,9 @@ class Entity(ABC):
                 self._ids.add(_i)
                 break
         return _i
+
+    def kill(self):
+        self.marked_for_death = True
 
     @abstractmethod
     def start(self):
