@@ -5,7 +5,7 @@ from time import perf_counter
 
 SWIPE_DELTA_THRESHOLD_X = 130
 SWIPE_DELTA_THRESHOLD_Y = 75
-SWIPE_TIME_THRESHOLD = 0.8
+SWIPE_TIME_THRESHOLD = 0.4
 
 class DiffQueue():
 	SIZE = 10

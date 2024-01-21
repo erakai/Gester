@@ -20,6 +20,11 @@ GAMES = [
         "games/assets/gallery-covers/pong.jpeg",
     ),
     (
+        "2048",
+        "games/2048/2048.py",
+        "games/assets/gallery-covers/2048.jpeg",
+    ),
+    (
         "Hand Visualization",
         "games/hand-visualizer/hand_visualization.py",
         "games/assets/gallery-covers/hand-visualizer.jpeg",
