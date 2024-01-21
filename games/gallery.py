@@ -29,6 +29,11 @@ GAMES = [
         "games/hand-visualizer/hand_visualization.py",
         "games/assets/gallery-covers/hand-visualizer.jpeg",
     ),
+    (
+        "Simon Says",
+        "games/SimonSays.py",
+        "games/assets/SimonSays.png"
+    )
 ]
 COLUMN_COUNT = 5
 COVER_SIZE_X = 250
