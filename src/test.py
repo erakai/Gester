@@ -1,4 +1,5 @@
 import time
 
-while True:
-    print(round(time.perf_counter()))
+test = [0] * 5
+
+print(test)
