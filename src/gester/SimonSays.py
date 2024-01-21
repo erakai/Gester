@@ -6,7 +6,12 @@ from gester import Entity, Game, GestureInput
 from gester.attributes import Point, Size, Color, has_attrs
 
 
-# It sucks at everything right now
+# make gestures more accurate
+# add score counter DONZERONI
+# decrease time over time, no floor goes all the way to milliseconds
+
+# probably should've made display string a class member huh
+
 
 class SimonSays(Entity):
     position: Point
@@ -16,7 +21,6 @@ class SimonSays(Entity):
     started = False
     game_in_progress = False
     start_time = None
-    last_tick = None
     time_to_move = 3
     gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "PEACE_SIGN",
                         "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
@@ -25,6 +29,10 @@ class SimonSays(Entity):
     simon_said = False
     next_gest = 0
     games_played = 0
+    end_turn = False
+    score = 0
+    guess_correct = False
+    go_next = False
 
     @has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
@@ -51,6 +59,9 @@ class SimonSays(Entity):
             self.simon_said = True
         else:
             self.simon_said = False
+    
+    def get_score_string(self):
+        return " Score: " + str(self.score)
 
     def render(self, surface: pygame.Surface):
         color = pygame.Color(
@@ -97,7 +108,7 @@ class SimonSays(Entity):
         if not self.started:
             # display the text with the countdown
             time_to_start = (self.start_time + self.time_to_move) - round(time.perf_counter())
-            display_string = "Simon Says starting in: " + str(time_to_start)
+            display_string = "Simon Says starting in: " + str(time_to_start) + self.get_score_string()
             self.setText(display_string)
         else:
             # --started--
@@ -105,12 +116,12 @@ class SimonSays(Entity):
             #             "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
             # game_in_progress, next_move
 
-            if (self.start_time + (self.time_to_move * (self.games_played + 2))) - round(time.perf_counter()) < 1:
+            if (self.start_time + (self.time_to_move * ((2 * self.games_played) + 2))) - round(time.perf_counter()) < 1:
                 self.game_in_progress = True
 
             if not self.game_in_progress:
                 # display the text with the countdown
-                time_to_start = (self.start_time + (self.time_to_move * (self.games_played + 2))) - round(time.perf_counter())
+                time_to_start = (self.start_time + (self.time_to_move * ((2 * self.games_played) + 2))) - round(time.perf_counter())
                 
                 rand_gest = self.gestures[self.next_gest]
 
@@ -119,32 +130,39 @@ class SimonSays(Entity):
                 else:
                     display_string = "Do: " + rand_gest + " in: " + str(time_to_start)
 
-                self.setText(display_string)
+                self.setText(display_string + self.get_score_string())
             else:
-                # take capture
-                user_gesture = GestureInput.get_hand_gesture()
-                if user_gesture == self.gestures[self.next_gest]:
-                    if self.simon_said:
-                        display_string = "You did it!"
-                    else:
-                        display_string = "Simon didn't say to do that!"
-                else:
-                    if not self.simon_said:
-                        display_string = "You did it!"
-                    else:
-                        display_string = "That wasn't quite right!"
-                
-                self.setText(display_string)
-                # gen next move
-                # gen simon choice
-                # set game in progress = False
-                # increase games_played
+                # if to change time after 3 more seconds pass
+                if (self.start_time + (self.time_to_move * ((2 * self.games_played) + 3))) - round(time.perf_counter()) < 1:
+                    self.go_next = True
 
-                # wait another 5 seconds then do this:
-                # self.gen_next_move()
-                # self.gen_simon_choice()
-                # self.games_played += 1
-                # self.game_in_progress = False
+                if not self.end_turn:
+                    user_gesture = GestureInput.get_hand_gesture()
+                    if user_gesture == self.gestures[self.next_gest]:
+                        if self.simon_said:
+                            display_string = "You did it!"
+                            self.guess_correct = True
+                        else:
+                            display_string = "Simon didn't say to do that!"
+                    else:
+                        if not self.simon_said:
+                            display_string = "You did it!"
+                            self.guess_correct = True
+                        else:
+                            display_string = "That wasn't quite right!"
+                    
+                    if self.guess_correct:
+                        self.score += 1
+                    self.setText(display_string + self.get_score_string())
 
-                pass
-            
+                    self.end_turn = True
+                elif self.go_next:
+                    self.guess_correct = False
+                    self.gen_next_move()
+                    self.gen_simon_choice()
+                    self.games_played += 1
+                    self.game_in_progress = False
+                    self.wl_screen = True
+                    self.go_next = False
+                    self.end_turn = False
+
