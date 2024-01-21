@@ -4,7 +4,7 @@
 
 Gester is a creative collection of games utilizing an in-house gesture processing library that reads in webcam data to generate an approximation of your hand moving on a desk.
 
-Gester was created as an entry in the 36-hour Boilermake XI Hackathon. You can find the entry __here__.
+Gester was created as an entry in the 36-hour Boilermake XI Hackathon. You can find the entry [here](https://devpost.com/software/gester-a-gesture-based-arcade-platform).
 
 Contributors:
 - Kai Tinkess
@@ -18,7 +18,7 @@ First, run
 git submodule update --init --recursive
 ```
 
-This instructions will be for MacOS only.
+These instructions will be for MacOS only.
 
 First, install some dependcies and restart your shell:
 ```bash
@@ -51,4 +51,4 @@ python games/gallery.py
 
 ## Screenshots
 
-You can find more information and screenshots on the __Devpost__.
+You can find more information and screenshots on the [Devpost](https://devpost.com/software/gester-a-gesture-based-arcade-platform).
