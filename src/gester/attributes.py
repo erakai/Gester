@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import overload
 
+import pygame
+
 
 class Attribute(ABC):
     _id: str
@@ -175,3 +177,7 @@ class Color(Attribute):
 
     def get_alpha(self):
         return self._get("alpha")
+
+    def to_pygame(self):
+        return pygame.Color(self._get("red"), self._get("green"), 
+            self._get("blue"), self._get("alpha"))

@@ -45,7 +45,6 @@ class Game:
             # pygame.QUIT event means the user clicked X to close your window
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    GestureInput.close()
                     running = False
 
             if isCamera:
@@ -70,4 +69,5 @@ class Game:
         if cam is not None:
             cam.stop()
 
+        GestureInput.close()
         pygame.quit()

@@ -10,15 +10,13 @@ class Text(Entity):
     size: Size
     color: Color
     text = "Default Text"
-    started = False
-    start_time = time.time()
+    text_color : Color
 
-    @has_attrs(("position", Point), ("size", Size), ("color", Color))
+    @has_attrs(("position", Point), ("size", Size), ("color", Color), ("text_color", Color))
     def __init__(self, *args):
         super().__init__()
 
     def start(self):
-        # initialize timer
         pass
 
     # call this inside of think if you want the text to change
@@ -27,30 +25,11 @@ class Text(Entity):
         self.text = inputString
 
     def render(self, surface: pygame.Surface):
-        color = pygame.Color(
-            self.color.get_red(),
-            self.color.get_green(),
-            self.color.get_blue(),
-            self.color.get_alpha(),
-        )
-
-        pygame.draw.rect(
-            surface,
-            color,
-            pygame.Rect(
-                self.position.get_x(),
-                self.position.get_y(),
-                self.size.get_width(),
-                self.size.get_height(),
-            ),
-        )
-
         # Setting up the font
         font = pygame.font.SysFont('Comic Sans MS', 30)
         
         # Render the text
-        text_color = (255, 255, 255)  # Change this to your desired text color, different from the rectangle color
-        text_surface = font.render(self.text, True, text_color)
+        text_surface = font.render(self.text, True, self.text_color.to_pygame())
         
         # Positioning the text
         text_rect = text_surface.get_rect(center=(self.position.get_x() + self.size.get_width() // 2,
@@ -60,13 +39,4 @@ class Text(Entity):
         surface.blit(text_surface, text_rect)
 
     def think(self):
-        # new_str = self.text + "a"
-        # self.setText(new_str)
-
-        # check if timer done
-        # if so then check hand gesture, if correct say "good job" otherwise say "that was not quite it"
-
-        # reinitilize timer and 
-
-        # if timer isn't done, display how many seconds remaining until it will check
         pass
