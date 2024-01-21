@@ -20,6 +20,7 @@ class Game:
     def init(self, window_width, window_height, isCamera=False):
         # pygame setup
         pygame.init()
+        pygame.font.init()
         surface = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
         running = True
