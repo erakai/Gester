@@ -43,6 +43,11 @@ GAMES = [
         "Pikachu Tomodachi",
         "games/Tomodachi/Tomodachi.py",
         "games/assets/gallery-covers/Pikachu_cover.png"
+    ),
+    (
+        "Drake Tomodachi",
+        "games/Tomodachi/Drake.py",
+        "games/assets/gallery-covers/drake_cover.png"
     )
 ]
 COLUMN_COUNT = 5
