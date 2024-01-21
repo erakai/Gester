@@ -55,7 +55,7 @@ def init(dimensions: tuple[int, int]) -> None:
     """
     _wrapper = GestureWrapper(dimensions)
     stream = _wrapper.create_stream(_process_data)
-    thread = threading.Thread(target=stream.begin_read)
+    thread = threading.Thread(target=stream.begin_read, daemon=True)
     thread.start()
 
 
