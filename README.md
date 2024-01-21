@@ -1,8 +1,15 @@
+![logo](screenshots/Gester-logos.jpeg)
+
 # Gester
 
 Gester is a creative collection of games utilizing an in-house gesture processing library that reads in webcam data to generate an approximation of your hand moving on a desk.
 
-## Stack
+Gester was created as an entry in the 36-hour Boilermake XI Hackathon. You can find the entry __here__.
+
+Contributors:
+- Kai Tinkess
+- Alex Hunton
+- Kian Nowrouzi
 
 ## Getting Started
 
@@ -24,8 +31,8 @@ Make sure that you follow the [pyenv](https://github.com/pyenv/pyenv) directions
 
 Now navigate to this directory (`gester/`):
 ```bash
-pyenv install 3.12
-pyenv local 3.12
+pyenv install 3.10.5
+pyenv local 3.10.5
 ```
 
 Now get poetry (our dependency manager), create a virtual environment, and install our dependencies:
@@ -39,12 +46,9 @@ If you are having trouble running `poetry shell` due to python versioning, try `
 
 Finally, you are able to launch a game as follows:
 ```
-python3 -m games.{game}
-```
-
-For example,
-```
-python3 -m games.pong 
+python games/gallery.py
 ```
 
 ## Screenshots
+
+You can find more information and screenshots on the __Devpost__.
