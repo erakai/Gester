@@ -1,9 +1,12 @@
 import pygame
 import time
+import random
 
-from gester import Entity, Game
+from gester import Entity, Game, GestureInput
 from gester.attributes import Point, Size, Color, has_attrs
 
+
+# It sucks at everything right now
 
 class SimonSays(Entity):
     position: Point
@@ -11,10 +14,17 @@ class SimonSays(Entity):
     color: Color
     text = "Loading"
     started = False
+    game_in_progress = False
     start_time = None
     last_tick = None
-    gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "NO_HAND", "PEACE_SIGN",
+    time_to_move = 3
+    gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "PEACE_SIGN",
                         "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
+    min_value = 0
+    max_value = len(gestures) - 1
+    simon_said = False
+    next_gest = 0
+    games_played = 0
 
     @has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
@@ -23,12 +33,24 @@ class SimonSays(Entity):
     def start(self):
         # initialize timer
         self.start_time = round(time.perf_counter())
+        self.gen_next_move()
+        self.gen_simon_choice()
         pass
 
     # call this inside of think if you want the text to change
     # it might be useful to user a timer depending on what you are trying to do
     def setText(self, inputString):
         self.text = inputString
+
+    def gen_next_move(self):
+        self.next_gest = random.randint(self.min_value, self.max_value)
+    
+    def gen_simon_choice(self):
+        choice = random.randint(0, 1)
+        if choice == 0:
+            self.simon_said = True
+        else:
+            self.simon_said = False
 
     def render(self, surface: pygame.Surface):
         color = pygame.Color(
@@ -69,35 +91,60 @@ class SimonSays(Entity):
 
         # --Set Up--
         # For the first 5 seconds just say "Simon Says starting in: [remaining seconds]"
-        if self.start_time + 5 < round(time.perf_counter()):
+        if self.start_time + self.time_to_move <= round(time.perf_counter()):
             self.started = True
 
         if not self.started:
             # display the text with the countdown
-            time_to_start = (self.start_time + 5) - round(time.perf_counter())
+            time_to_start = (self.start_time + self.time_to_move) - round(time.perf_counter())
             display_string = "Simon Says starting in: " + str(time_to_start)
             self.setText(display_string)
-        else: 
+        else:
             # --started--
-            # now it has started
-            # pick a random gesture out of the set (create some maybe)
-            # display the name with either "Simon says [name]" or just "[name]"
-            # gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "NO_HAND", "PEACE_SIGN",
+            # gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "PEACE_SIGN",
             #             "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
-            
+            # game_in_progress, next_move
 
-            # display counting down timer
-            # once it hits zero check the current gesture
-            # if it's the same gesture and the text didn't say "Simon Says" then show "Simon didn't say go!"
-            # otherwise show "you did it!"
-            
-            # show name of gesture
-            # display counting down timer
+            if (self.start_time + (self.time_to_move * (self.games_played + 2))) - round(time.perf_counter()) < 1:
+                self.game_in_progress = True
 
-            # once it hits 0 then check the current hand gesture
+            if not self.game_in_progress:
+                # display the text with the countdown
+                time_to_start = (self.start_time + (self.time_to_move * (self.games_played + 2))) - round(time.perf_counter())
+                
+                rand_gest = self.gestures[self.next_gest]
+
+                if self.simon_said:
+                    display_string = "Simon Says Do: " + rand_gest + " in: " + str(time_to_start)
+                else:
+                    display_string = "Do: " + rand_gest + " in: " + str(time_to_start)
+
+                self.setText(display_string)
+            else:
+                # take capture
+                user_gesture = GestureInput.get_hand_gesture()
+                if user_gesture == self.gestures[self.next_gest]:
+                    if self.simon_said:
+                        display_string = "You did it!"
+                    else:
+                        display_string = "Simon didn't say to do that!"
+                else:
+                    if not self.simon_said:
+                        display_string = "You did it!"
+                    else:
+                        display_string = "That wasn't quite right!"
+                
+                self.setText(display_string)
+                # gen next move
+                # gen simon choice
+                # set game in progress = False
+                # increase games_played
+
+                # wait another 5 seconds then do this:
+                # self.gen_next_move()
+                # self.gen_simon_choice()
+                # self.games_played += 1
+                # self.game_in_progress = False
+
+                pass
             
-            # check if timer done
-            # if so then check hand gesture, if correct say "good job" otherwise say "that was not quite it"
-            # reinitilize timer and 
-            # if timer isn't done, display how many seconds remaining until it will check
-            pass
