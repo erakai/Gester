@@ -3,8 +3,8 @@ from gester import GestureInput
 
 from time import perf_counter
 
-SWIPE_DELTA_THRESHOLD = 300
-SWIPE_TIME_THRESHOLD = 0.5
+SWIPE_DELTA_THRESHOLD = 150
+SWIPE_TIME_THRESHOLD = 0.3
 
 class DiffQueue():
 	SIZE = 10
@@ -19,7 +19,12 @@ class DiffQueue():
 			self._queue.pop(0)
 			self._queue.append(v)
 
+	def flush(self):
+		self._queue = [-1 for i in range(self.SIZE)]
+
 	def get_diff(self):
+		if (self._queue[0] == -1 or self._queue[self.SIZE - 1] == -1):
+			return 0
 		return self._queue[0] - self._queue[self.SIZE - 1]
 
 
@@ -74,6 +79,9 @@ class SwipeDetector(Entity):
 
 				if (self._y_queue.get_diff() < 0):
 					self.call_hooked_ents("down")
+		else:
+			self._x_queue.flush()
+			self._y_queue.flush()
 
 		if (perf_counter() - self.time_start > SWIPE_TIME_THRESHOLD):
 			self.on_wait = False
