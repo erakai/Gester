@@ -38,3 +38,7 @@ class Entity(ABC):
 
     def on_pygame_event(self, event: pygame.event.Event):
         pass
+
+    # swipe : left, right, up, down
+    def on_swipe(self, swipe : str):
+        pass

@@ -2,7 +2,7 @@ import pygame
 import pygame.camera
 from pygame.locals import *
 
-from gester import Entity
+from gester import Entity, GestureInput
 
 
 class Game:
@@ -25,12 +25,14 @@ class Game:
         clock = pygame.time.Clock()
         running = True
 
-        cam : pygame.camera.Camera
-        if (isCamera):
+        GestureInput.init((window_width, window_height))
+
+        cam: pygame.camera.Camera
+        if isCamera:
             pygame.camera.init()
 
             cam = pygame.camera.Camera(0, (window_width, window_height))
-            if (cam == None):
+            if cam == None:
                 raise RuntimeError("No avaliable cameras, sorry :(")
 
             cam.start()
@@ -45,10 +47,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
 
-            if (isCamera):
+            if isCamera:
                 img = cam.get_image()
                 img = pygame.transform.flip(img, True, False)
-                surface.blit(img,(0,0))
+                surface.blit(img, (0, 0))
             else:
                 # fill the screen with a color to wipe away anything from last frame
                 surface.fill("grey")
@@ -64,6 +66,8 @@ class Game:
 
             clock.tick(60)  # limits FPS to 60
 
-        if (cam is not None):
+        if cam is not None:
             cam.stop()
+
+        GestureInput.close()
         pygame.quit()
