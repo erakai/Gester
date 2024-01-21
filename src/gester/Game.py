@@ -20,6 +20,7 @@ class Game:
     def init(self, window_width, window_height, isCamera=False):
         # pygame setup
         pygame.init()
+        pygame.display.set_caption("Gester")
         pygame.font.init()
         surface = pygame.display.set_mode((window_width, window_height))
         clock = pygame.time.Clock()
@@ -57,16 +58,23 @@ class Game:
 
             # RENDER YOUR GAME HERE
 
+            to_remove = []
             for ent in self._ents:
+                if ent.marked_for_death:
+                    to_remove.append(ent)
+                    continue
                 ent.render(surface)
                 ent.think()
+
+            for e in to_remove:
+                self._ents.remove(e)
 
             # flip() the display to put your work on screen
             pygame.display.flip()
 
             clock.tick(60)  # limits FPS to 60
 
-        if cam is not None:
+        if cam and cam is not None:
             cam.stop()
 
         GestureInput.close()
