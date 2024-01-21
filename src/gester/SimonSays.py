@@ -24,8 +24,8 @@ class SimonSays(Entity):
     started = False
     game_in_progress = False
     start_time = None
-    time_to_move = 3
-    gestures = ["OPEN HAND", "CLOSED_FIST", "INDEX_EXTENDED", "PEACE_SIGN",
+    time_to_move = 2
+    gestures = ["OPEN_HAND", "CLOSED_FIST", "INDEX_EXTENDED", "PEACE_SIGN",
                         "RING_EXTENDED", "MIDDLE_EXTENDED", "PINKY_EXTENDED", "THUMB_EXTENDED"]
     min_value = 0
     max_value = len(gestures) - 1
@@ -73,6 +73,11 @@ class SimonSays(Entity):
     
     def get_score_string(self):
         return " Score: " + str(self.score)
+
+    def make_faster(self):
+        print(self.time_to_move)
+        self.time_to_move -= (0.1)
+        self.time_to_move = max(self.time_to_move, 1)
     
     def reset(self):
         self.guess_correct = False
@@ -84,6 +89,7 @@ class SimonSays(Entity):
         self.go_next = False
         self.end_turn = False
         self.occurences = [0] * (self.max_value + 1)
+        # self.make_faster()
 
     def render(self, surface: pygame.Surface):
         color = pygame.Color(
@@ -129,7 +135,8 @@ class SimonSays(Entity):
 
         if not self.started:
             # display the text with the countdown
-            time_to_start = (self.start_time + self.time_to_move) - round(time.perf_counter())
+            time_to_start = (self.start_time + self.time_to_move) - round(time.perf_counter(), 2)
+            time_to_start = f"{time_to_start:.2f}"
             display_string = "Simon Says starting in: " + str(time_to_start) + self.get_score_string()
             self.setText(display_string)
         else:
@@ -143,7 +150,8 @@ class SimonSays(Entity):
 
             if not self.game_in_progress:
                 # display the text with the countdown
-                time_to_start = (self.start_time + (self.time_to_move * ((2 * self.games_played) + 2))) - round(time.perf_counter())
+                time_to_start = (self.start_time + (self.time_to_move * ((2 * self.games_played) + 2))) - round(time.perf_counter(), 2)
+                time_to_start = f"{time_to_start:.2f}"
                 
                 rand_gest = self.gestures[self.next_gest]
 
@@ -163,9 +171,12 @@ class SimonSays(Entity):
                     for i in range(10):
                         # print("image captured")
                         get_gesture = GestureInput.get_hand_gesture()
-                        print("get gesture: " + str(get_gesture))
+                        closest_gesture = GestureInput.get_hand_gesture()
+                        # print("get gesture: " + str(get_gesture))
                         if not get_gesture == "NO_HAND":
-                            print("index being added to: " + str(self.hash_table[get_gesture]))
+                            # print("index being added to: " + str(self.hash_table[get_gesture]))
+                            # for key, value in self.hash_table.items():
+                            #     print(f"Key: {key}, Value: {value}")
                             self.occurences[self.hash_table[get_gesture]] += 1
 
                     
@@ -176,11 +187,11 @@ class SimonSays(Entity):
                     # for key, value in self.hash_table.items():
                     #     print(f"Key: {key}, Value: {value}")
 
-                    print("occurences: " + str(self.occurences))
-                    print("max val: " + str(max_val))
-                    print("max index: " + str(max_index))
-                    print("read: " + str(closest_gesture))
-                    print("Expected: " + str(self.gestures[self.next_gest]))
+                    # print("occurences: " + str(self.occurences))
+                    # print("max val: " + str(max_val))
+                    # print("max index: " + str(max_index))
+                    # print("read: " + str(closest_gesture))
+                    # print("Expected: " + str(self.gestures[self.next_gest]))
 
                     if closest_gesture == self.gestures[self.next_gest]:
                         if self.simon_said:
@@ -195,16 +206,16 @@ class SimonSays(Entity):
                         else:
                             display_string = "That wasn't quite right!"
                     
-                    if self.simon_said:
-                        print("simon said")
-                    else:
-                        print("simon didn't say")
+                    # if self.simon_said:
+                    #     print("simon said")
+                    # else:
+                    #     print("simon didn't say")
 
                     if self.guess_correct:
                         self.score += 1
-                        print("point given")
-                    else:
-                        print("point not given")
+                    #     print("point given")
+                    # else:
+                    #     print("point not given")
                     self.setText(display_string + self.get_score_string())
 
                     self.end_turn = True
