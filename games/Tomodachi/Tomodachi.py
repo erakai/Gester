@@ -128,7 +128,24 @@ class Pikachu(Rect):
     def render(self, screen):
         screen.blit(self.platform_image, (self.position.get_x(), self.position.get_y()))
 
+class Background(Entity):
+    def start(self):
+        # raw_image = pygame.image.load("games/assets/slots/slot_machine.png")
+        # self.booth = pygame.transform.scale(raw_image, (600, 660))
+        raw_image = pygame.image.load("games/assets/pokemon_background.png")
+        self.image = pygame.transform.scale(raw_image, (config.WIDTH, config.HEIGHT))
+        
+        # self.booth = pygame.transform.scale(raw_image, (600, 660))
+        # self.image = pygame.image.load("games/assets/slots/background.jpeg")
+
+    def think(self):
+        pass
+
+    def render(self, screen):
+        screen.blit(self.image, (0, 0))
+
 handhover = HandHover()
+game.add_ent(Background())
 game.add_ent(BoxSpawner(game.add_ent, 0, 0, handhover))
 game.add_ent(handhover)
 game.add_ent(Pikachu())
