@@ -6,11 +6,14 @@ from gester import Entity, Game, GestureInput
 from gester.attributes import Point, Size, Color, has_attrs
 
 
-# make gestures more accurate
+# make gestures more accurate half-DONZERONI
 # add score counter DONZERONI
-# decrease time over time, no floor goes all the way to milliseconds
+# TODO: decrease time over time, no floor goes all the way to milliseconds 
+# TODO: make it take 10 and choose the highest match
 
 # probably should've made display string a class member huh
+
+# 1:52 AM - get_gesture 
 
 
 class SimonSays(Entity):
@@ -33,17 +36,25 @@ class SimonSays(Entity):
     score = 0
     guess_correct = False
     go_next = False
+    hash_table = None # Used to match a gesture to its index in occurences
+    occurences = [0] * (max_value + 1)
 
     @has_attrs(("position", Point), ("size", Size), ("color", Color))
     def __init__(self, *args):
         super().__init__()
 
     def start(self):
-        # initialize timer
         self.start_time = round(time.perf_counter())
         self.gen_next_move()
         self.gen_simon_choice()
+        self.init_hash()
         pass
+
+    def init_hash(self):
+        self.hash_table = {}
+
+        for i in range(len(self.gestures)):
+            self.hash_table[self.gestures[i]] = i
 
     # call this inside of think if you want the text to change
     # it might be useful to user a timer depending on what you are trying to do
@@ -62,6 +73,17 @@ class SimonSays(Entity):
     
     def get_score_string(self):
         return " Score: " + str(self.score)
+    
+    def reset(self):
+        self.guess_correct = False
+        self.gen_next_move()
+        self.gen_simon_choice()
+        self.games_played += 1
+        self.game_in_progress = False
+        self.wl_screen = True
+        self.go_next = False
+        self.end_turn = False
+        self.occurences = [0] * (self.max_value + 1)
 
     def render(self, surface: pygame.Surface):
         color = pygame.Color(
@@ -91,7 +113,7 @@ class SimonSays(Entity):
         
         # Positioning the text
         text_rect = text_surface.get_rect(center=(self.position.get_x() + self.size.get_width() // 2,
-                                                self.position.get_y() + self.size.get_height() // 2))
+                                                  self.position.get_y() + self.size.get_height() // 2))
 
         # Drawing the text
         surface.blit(text_surface, text_rect)
@@ -137,8 +159,30 @@ class SimonSays(Entity):
                     self.go_next = True
 
                 if not self.end_turn:
-                    user_gesture = GestureInput.get_hand_gesture()
-                    if user_gesture == self.gestures[self.next_gest]:
+                    closest_gesture = ""
+                    for i in range(10):
+                        # print("image captured")
+                        get_gesture = GestureInput.get_hand_gesture()
+                        print("get gesture: " + str(get_gesture))
+                        if not get_gesture == "NO_HAND":
+                            print("index being added to: " + str(self.hash_table[get_gesture]))
+                            self.occurences[self.hash_table[get_gesture]] += 1
+
+                    
+                    max_val = max(self.occurences)
+                    max_index = self.occurences.index(max_val)
+
+                    closest_gesture = self.gestures[max_index]
+                    # for key, value in self.hash_table.items():
+                    #     print(f"Key: {key}, Value: {value}")
+
+                    print("occurences: " + str(self.occurences))
+                    print("max val: " + str(max_val))
+                    print("max index: " + str(max_index))
+                    print("read: " + str(closest_gesture))
+                    print("Expected: " + str(self.gestures[self.next_gest]))
+
+                    if closest_gesture == self.gestures[self.next_gest]:
                         if self.simon_said:
                             display_string = "You did it!"
                             self.guess_correct = True
@@ -151,18 +195,18 @@ class SimonSays(Entity):
                         else:
                             display_string = "That wasn't quite right!"
                     
+                    if self.simon_said:
+                        print("simon said")
+                    else:
+                        print("simon didn't say")
+
                     if self.guess_correct:
                         self.score += 1
+                        print("point given")
+                    else:
+                        print("point not given")
                     self.setText(display_string + self.get_score_string())
 
                     self.end_turn = True
                 elif self.go_next:
-                    self.guess_correct = False
-                    self.gen_next_move()
-                    self.gen_simon_choice()
-                    self.games_played += 1
-                    self.game_in_progress = False
-                    self.wl_screen = True
-                    self.go_next = False
-                    self.end_turn = False
-
+                    self.reset()
